@@ -1,0 +1,38 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="Cafe RAG" id="cafe1">
+    <mxGraphModel dx="1200" dy="900" grid="1" gridSize="10" page="1" pageWidth="1100" pageHeight="900">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="src" value="Документы кафе: 5 регламентов (.md)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;" vertex="1" parent="1"><mxGeometry x="60" y="40" width="200" height="60" as="geometry"/></mxCell>
+        <mxCell id="ing" value="ingest.py: чтение файлов, sha256" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#cce5ff;strokeColor=#3b82c4;" vertex="1" parent="1"><mxGeometry x="60" y="170" width="200" height="60" as="geometry"/></mxCell>
+        <mxCell id="chk" value="Чанкинг по заголовкам, до 120 слов, overlap 20" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#cce5ff;strokeColor=#3b82c4;" vertex="1" parent="1"><mxGeometry x="60" y="300" width="200" height="60" as="geometry"/></mxCell>
+        <mxCell id="emb" value="Эмбеддинг: bge-m3 (Ollama), вектор 1024" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#cce5ff;strokeColor=#3b82c4;" vertex="1" parent="1"><mxGeometry x="60" y="430" width="200" height="60" as="geometry"/></mxCell>
+        <mxCell id="qd" value="Qdrant: коллекция regulations, индекс HNSW" style="shape=cylinder3;whiteSpace=wrap;html=1;fillColor=#c8f0d2;strokeColor=#3a9d5d;" vertex="1" parent="1"><mxGeometry x="60" y="560" width="200" height="90" as="geometry"/></mxCell>
+
+        <mxCell id="usr" value="Сотрудник кафе: вопрос" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;" vertex="1" parent="1"><mxGeometry x="500" y="40" width="200" height="60" as="geometry"/></mxCell>
+        <mxCell id="srch" value="search.py: вопрос → вектор → топ-3 чанка" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe0b2;strokeColor=#e08a00;" vertex="1" parent="1"><mxGeometry x="500" y="170" width="200" height="60" as="geometry"/></mxCell>
+        <mxCell id="gen" value="Генерация: qwen2.5 (Ollama), ответ только по чанкам" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe0b2;strokeColor=#e08a00;" vertex="1" parent="1"><mxGeometry x="500" y="300" width="200" height="60" as="geometry"/></mxCell>
+        <mxCell id="ev" value="eval.py: 5 вопросов, метрика recall@3" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e6d7f5;strokeColor=#8e5bb5;" vertex="1" parent="1"><mxGeometry x="500" y="580" width="200" height="60" as="geometry"/></mxCell>
+
+        <mxCell id="e1" value="файлы .md (batch)" style="endArrow=classic;html=1;" edge="1" parent="1" source="src" target="ing"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e2" value="текст с заголовками" style="endArrow=classic;html=1;" edge="1" parent="1" source="ing" target="chk"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e3" value="чанки" style="endArrow=classic;html=1;" edge="1" parent="1" source="chk" target="emb"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e4" value="векторы + текст + имя файла" style="endArrow=classic;html=1;" edge="1" parent="1" source="emb" target="qd"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e5" value="вопрос" style="endArrow=classic;html=1;" edge="1" parent="1" source="usr" target="srch"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e6" value="текст вопроса для вектора" style="endArrow=classic;html=1;edgeStyle=orthogonalEdgeStyle;" edge="1" parent="1" source="srch" target="emb"><mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="380" y="200"/><mxPoint x="380" y="460"/></Array></mxGeometry></mxCell>
+        <mxCell id="e7" value="поиск ближайших векторов" style="endArrow=classic;html=1;edgeStyle=orthogonalEdgeStyle;" edge="1" parent="1" source="srch" target="qd"><mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="440" y="200"/><mxPoint x="440" y="605"/></Array></mxGeometry></mxCell>
+        <mxCell id="e8" value="вопрос + найденные чанки" style="endArrow=classic;html=1;" edge="1" parent="1" source="srch" target="gen"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e9" value="ответ + документ-источник" style="endArrow=classic;html=1;edgeStyle=orthogonalEdgeStyle;" edge="1" parent="1" source="gen" target="usr"><mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="760" y="330"/><mxPoint x="760" y="70"/></Array></mxGeometry></mxCell>
+        <mxCell id="e10" value="проверка: найден ли нужный документ" style="endArrow=classic;html=1;edgeStyle=orthogonalEdgeStyle;" edge="1" parent="1" source="ev" target="qd"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+        <mxCell id="lg" value="Легенда" style="text;html=1;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="60" y="700" width="80" height="20" as="geometry"/></mxCell>
+        <mxCell id="l1" value="Индексация (batch)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#cce5ff;strokeColor=#3b82c4;" vertex="1" parent="1"><mxGeometry x="60" y="730" width="150" height="30" as="geometry"/></mxCell>
+        <mxCell id="l2" value="Хранилище" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#c8f0d2;strokeColor=#3a9d5d;" vertex="1" parent="1"><mxGeometry x="230" y="730" width="120" height="30" as="geometry"/></mxCell>
+        <mxCell id="l3" value="Ответ на вопрос (online)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffe0b2;strokeColor=#e08a00;" vertex="1" parent="1"><mxGeometry x="370" y="730" width="170" height="30" as="geometry"/></mxCell>
+        <mxCell id="l4" value="Оценка качества" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e6d7f5;strokeColor=#8e5bb5;" vertex="1" parent="1"><mxGeometry x="560" y="730" width="140" height="30" as="geometry"/></mxCell>
+        <mxCell id="l5" value="Внешние участники" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;" vertex="1" parent="1"><mxGeometry x="720" y="730" width="150" height="30" as="geometry"/></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
